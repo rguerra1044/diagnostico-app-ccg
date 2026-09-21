@@ -40,6 +40,8 @@ export default function HomePage() {
   >(new Map());
   const [loading, setLoading] = useState(true);
 
+  const isMaster = user?.role === 'master';
+
   const loadData = useCallback(async () => {
     setLoading(true);
     const [accs, expData] = await Promise.all([
@@ -51,7 +53,8 @@ export default function HomePage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  // Only master ever needs (or should request) the all-clients summary data.
+  useEffect(() => { if (isMaster) loadData(); }, [isMaster, loadData]);
 
   // Clients always go to their dashboard
   if (user?.role === 'client') {

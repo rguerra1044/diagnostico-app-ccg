@@ -104,6 +104,7 @@ export default function WizardShell() {
   const [showPrefillSuccess, setShowPrefillSuccess] = useState(false);
   const [savingDiagnostic, setSavingDiagnostic] = useState(false);
   const [saveError, setSaveError] = useState(false);
+  const [savingExit, setSavingExit] = useState(false);
 
   /* ── B5: Celebration state ── */
   const [showCelebration, setShowCelebration] = useState(false);
@@ -270,13 +271,21 @@ export default function WizardShell() {
     }
   }
 
-  function handleSaveAndExit() {
-    setDraftActive(true);
-    setShowExitConfirm(false);
+  async function handleSaveAndExit() {
     const wasPrefill = useDiagnosticStore.getState().prefillMode;
     if (wasPrefill) {
+      setSavingExit(true);
+      const ok = await savePrefillData();
+      setSavingExit(false);
+      if (!ok) {
+        alert('No se pudo guardar el pre-llenado. Revisa tu conexión e intenta de nuevo.');
+        return;
+      }
+      setShowExitConfirm(false);
       setView('history');
     } else {
+      setDraftActive(true);
+      setShowExitConfirm(false);
       setView('home');
     }
   }
@@ -528,8 +537,8 @@ export default function WizardShell() {
               Puedes guardar tu progreso y continuar despues, o salir sin guardar.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <button onClick={handleSaveAndExit} className="w-full rounded-xl bg-accent text-white font-semibold hover:bg-mid transition-all cursor-pointer inline-flex items-center justify-center" style={{ padding: 'var(--sp-btn-c)', fontSize: 'var(--fs-13)', gap: '6px' }}>
-                <Save style={{ width: 'var(--fs-14)', height: 'var(--fs-14)' }} /> Guardar y salir
+              <button onClick={handleSaveAndExit} disabled={savingExit} className="w-full rounded-xl bg-accent text-white font-semibold hover:bg-mid transition-all cursor-pointer inline-flex items-center justify-center disabled:opacity-50" style={{ padding: 'var(--sp-btn-c)', fontSize: 'var(--fs-13)', gap: '6px' }}>
+                <Save style={{ width: 'var(--fs-14)', height: 'var(--fs-14)' }} /> {savingExit ? 'Guardando...' : 'Guardar y salir'}
               </button>
               <button onClick={handleExit} className="w-full rounded-xl border border-error/30 text-error font-medium hover:bg-error/5 transition-all cursor-pointer" style={{ padding: 'var(--sp-btn-b)', fontSize: 'var(--fs-12)' }}>
                 Salir sin guardar
