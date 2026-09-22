@@ -18,7 +18,7 @@ const THRESHOLDS: Record<Sector, SizeThreshold[]> = {
   servicios: [
     MICRO_ALL,
     { size: 'Pequeña', maxWorkers: 50, maxSalesMDP: 100, maxTMC: 95 },
-    { size: 'Mediana', maxWorkers: 100, maxSalesMDP: 100, maxTMC: 100 },
+    { size: 'Mediana', maxWorkers: 100, maxSalesMDP: 250, maxTMC: 235 },
   ],
   manufactura: [
     MICRO_ALL,
