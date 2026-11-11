@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 import type { SavedDiagnostic, MarginLevel, Sector, CurrencyCode } from './types';
 import { ALL_CRITERIA } from '../config/questions';
 import { buildSoftwareLabel } from './formatters';
-import { DEFAULT_INDUSTRY_BENCHMARKS } from '../config/constants';
+import { DEFAULT_INDUSTRY_BENCHMARKS, SUELDO_SIN_ASIGNAR } from '../config/constants';
 import { computeMaturityIndex, computeRiskProfile, generateDiagnosticNarrative, generateGrowthReadiness } from './diagnosticAnalysis';
 import { formatMonetaryValue } from './money';
 import { COMPLEMENT_MARK_PNG, COMPLEMENT_MARK_PNG_WHITE, COMPLEMENT_TEXT_PNG_WHITE } from './brandLogo';
@@ -1146,7 +1146,7 @@ export function buildPdfDoc(diagnostic: SavedDiagnostic, currencyCode: CurrencyC
 
     const infoParts: string[] = [];
     if (g.antiguedad) infoParts.push(`${g.antiguedad} años`);
-    if ((g as any).rangoSueldo) infoParts.push((g as any).rangoSueldo);
+    if ((g as any).rangoSueldo) infoParts.push((g as any).rangoSueldo === SUELDO_SIN_ASIGNAR ? 'Sin sueldo asignado' : (g as any).rangoSueldo);
     if ((g as any).esFamiliar === true) infoParts.push('Familiar');
 
     if (infoParts.length > 0) {

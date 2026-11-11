@@ -18,7 +18,7 @@ import type {
 } from './types';
 import { classifyCompanySize } from '../config/companySize';
 import { SERVICE_AREAS } from '../config/serviceAreas';
-import { SUELDO_RANGES, SUELDO_RANGES_USD } from '../config/constants';
+import { SUELDO_RANGES, SUELDO_RANGES_USD, SUELDO_SIN_ASIGNAR } from '../config/constants';
 import { formatMonetaryValue, normalizeMillonesValue } from './money';
 
 export function calculateCompanySize(
@@ -169,4 +169,11 @@ export function getHighestPaidGerencia(gerencias: Gerencia[], currencyCode: Curr
   return candidates.reduce((best, g) =>
     ranges.indexOf(g.rangoSueldo!) > ranges.indexOf(best.rangoSueldo!) ? g : best
   );
+}
+
+/** Texto a mostrar para un rango de sueldo, cubriendo el sentinel "sin asignar". */
+export function formatRangoSueldo(rangoSueldo: string | null | undefined): string {
+  if (!rangoSueldo) return '';
+  if (rangoSueldo === SUELDO_SIN_ASIGNAR) return 'Sin sueldo asignado';
+  return `$${rangoSueldo}`;
 }

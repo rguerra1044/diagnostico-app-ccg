@@ -3,8 +3,8 @@ import type { LucideIcon } from 'lucide-react';
 import { Building, Briefcase, BarChart3, Settings, Users, ClipboardList, X } from 'lucide-react';
 import { useDiagnosticStore } from '../../store/diagnosticStore';
 import type { CalificadoStatus, DGEvaluation } from '../../lib/types';
-import { SUELDO_RANGES, SUELDO_RANGES_USD } from '../../config/constants';
-import { getHighestPaidGerencia } from '../../lib/calculations';
+import { SUELDO_RANGES, SUELDO_RANGES_USD, SUELDO_SIN_ASIGNAR } from '../../config/constants';
+import { getHighestPaidGerencia, formatRangoSueldo } from '../../lib/calculations';
 
 
 const CALIFICADO_OPTIONS: { value: CalificadoStatus; label: string; color: string }[] = [
@@ -264,8 +264,9 @@ function GerenciaPanel({ g, i, setGerencia, onClose, sueldoRanges, isUsd }: {
                 {sueldoRanges.map(r => (
                   <option key={r} value={r}>${r}</option>
                 ))}
+                <option value={SUELDO_SIN_ASIGNAR}>Sin sueldo asignado</option>
               </select>
-              {isUsd && g.rangoSueldo && (
+              {isUsd && g.rangoSueldo && g.rangoSueldo !== SUELDO_SIN_ASIGNAR && (
                 <span className="text-muted font-medium" style={{ fontSize: 'var(--fs-11)' }}>USD</span>
               )}
             </div>
@@ -352,7 +353,7 @@ export default function Step5Gerencias() {
   function nodeSubtext(g: typeof dg) {
     if (!g.cubierto) return null;
     const parts: string[] = [];
-    if (g.rangoSueldo) parts.push(`$${g.rangoSueldo}`);
+    if (g.rangoSueldo) parts.push(formatRangoSueldo(g.rangoSueldo));
     if (g.esFamiliar === true) parts.push('Familiar');
     if (g.antiguedad) parts.push(`${g.antiguedad}a`);
     return parts.length > 0 ? parts.join(' · ') : null;

@@ -6,7 +6,7 @@
 import PptxGenJS from 'pptxgenjs';
 import type { SavedDiagnostic, MarginLevel, Sector, CurrencyCode } from './types';
 import { ALL_CRITERIA } from '../config/questions';
-import { DEFAULT_INDUSTRY_BENCHMARKS } from '../config/constants';
+import { DEFAULT_INDUSTRY_BENCHMARKS, SUELDO_SIN_ASIGNAR } from '../config/constants';
 import { buildSoftwareLabel } from './formatters';
 import { formatMonetaryValue } from './money';
 import { normalizeMarginLevel, getHighestPaidGerencia } from './calculations';
@@ -861,7 +861,7 @@ function addGerenciasSlide(pptx: PptxGenJS, d: SavedDiagnostic, companyName: str
       { text: calificadoLabel(g.calificado), options: { fontSize: 8, color: calColor, fill: { color: rowFill }, align: 'center', valign: 'middle' } },
       { text: g.antiguedad || '—', options: { fontSize: 8, color: MUTED, fill: { color: rowFill }, align: 'center', valign: 'middle' } },
       { text: g.esFamiliar ? 'Sí' : 'No', options: { fontSize: 8, color: g.esFamiliar ? BRAND_ORANGE : MUTED, fill: { color: rowFill }, align: 'center', valign: 'middle' } },
-      { text: g.rangoSueldo || '—', options: { fontSize: 8, color: MUTED, fill: { color: rowFill }, align: 'center', valign: 'middle' } },
+      { text: g.rangoSueldo === SUELDO_SIN_ASIGNAR ? 'Sin sueldo asignado' : (g.rangoSueldo || '—'), options: { fontSize: 8, color: MUTED, fill: { color: rowFill }, align: 'center', valign: 'middle' } },
     ]);
   });
 

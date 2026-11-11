@@ -2,6 +2,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import type { SavedDiagnostic, MarginLevel, CurrencyCode, AppUser } from './types';
 import { ALL_CRITERIA, PROFESIONALIZACION_CRITERIA, INSTITUCIONALIZACION_CRITERIA } from '../config/questions';
+import { SUELDO_SIN_ASIGNAR } from '../config/constants';
 import { buildSoftwareLabel } from './formatters';
 import { formatMonetaryValue } from './money';
 import { normalizeMarginLevel, getHighestPaidGerencia } from './calculations';
@@ -593,7 +594,7 @@ export async function exportToExcel(diagnostic: SavedDiagnostic, currencyCode: C
 
     const cellE = ws.getCell(r, 5);
     const infoParts: string[] = [];
-    if ((g as any).rangoSueldo) infoParts.push((g as any).rangoSueldo);
+    if ((g as any).rangoSueldo) infoParts.push((g as any).rangoSueldo === SUELDO_SIN_ASIGNAR ? 'Sin sueldo asignado' : (g as any).rangoSueldo);
     if ((g as any).esFamiliar === true) infoParts.push('Familiar');
     else if ((g as any).esFamiliar === false) infoParts.push('No familiar');
     cellE.value = infoParts.length > 0 ? infoParts.join(' | ') : '—';
@@ -918,7 +919,7 @@ export async function exportSelectedDiagnosticsToExcel(entries: SelectedDiagEntr
         esFamiliar: g.esFamiliar === true ? 'Sí' : g.esFamiliar === false ? 'No' : '—',
         antiguedad: g.antiguedad ? `${g.antiguedad} años` : '—',
         calificado: g.calificado === 'si' ? 'Sí' : g.calificado === 'no' ? 'No' : 'Por evaluar',
-        sueldo: g.rangoSueldo ?? '—',
+        sueldo: g.rangoSueldo === SUELDO_SIN_ASIGNAR ? 'Sin sueldo asignado' : (g.rangoSueldo ?? '—'),
         nivelEstudios: dgOptionLabel(DG_NIVEL_ESTUDIOS, ev?.nivelEstudios),
         experiencia: dgOptionLabel(DG_EXPERIENCIA, ev?.experienciaLaboral),
         gestion: dgOptionLabel(DG_SEGUIMIENTO, ev?.seguimientoResultados),

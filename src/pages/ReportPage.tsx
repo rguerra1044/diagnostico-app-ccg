@@ -3,7 +3,7 @@ import { useDiagnosticStore } from '../store/diagnosticStore';
 import { useAuthStore } from '../store/authStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { ALL_CRITERIA } from '../config/questions';
-import { DEFAULT_INDUSTRY_BENCHMARKS } from '../config/constants';
+import { DEFAULT_INDUSTRY_BENCHMARKS, SUELDO_SIN_ASIGNAR } from '../config/constants';
 import { exportToPdf } from '../lib/exportPdf';
 import { buildSoftwareLabel } from '../lib/formatters';
 import { computeMaturityIndex, computeRiskProfile, generateDiagnosticNarrative, generateGrowthReadiness } from '../lib/diagnosticAnalysis';
@@ -468,7 +468,9 @@ export default function ReportPage() {
                     )}
                     <div className="flex items-center text-muted" style={{ gap: '8px', fontSize: 'var(--fs-10)' }}>
                       {g.antiguedad && <span>{g.antiguedad} años</span>}
-                      {(g as any).rangoSueldo && <span>{(g as any).rangoSueldo}</span>}
+                      {(g as any).rangoSueldo && (
+                        <span>{(g as any).rangoSueldo === SUELDO_SIN_ASIGNAR ? 'Sin sueldo asignado' : (g as any).rangoSueldo}</span>
+                      )}
                       {(g as any).esFamiliar === true && <span className="text-accent font-medium">Familiar</span>}
                     </div>
                   </>

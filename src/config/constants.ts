@@ -91,6 +91,9 @@ export const SUELDO_RANGES_USD = [
   '11,000+',
 ];
 
+/** Sentinel fuera de SUELDO_RANGES/SUELDO_RANGES_USD: no participa en la escala ordenada. */
+export const SUELDO_SIN_ASIGNAR = 'sin_asignar';
+
 export const CLASSIFICATION_OPTIONS = [
   { value: 'prospecto' as const, label: 'Prospecto', color: 'bg-accent/15 text-accent' },
   { value: 'en_proceso' as const, label: 'En proceso', color: 'bg-warn/15 text-warn' },
